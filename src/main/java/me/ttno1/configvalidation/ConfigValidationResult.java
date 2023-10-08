@@ -11,11 +11,11 @@ public class ConfigValidationResult {
 		return new Builder();
 	}
 	
-	private final Map<ConfigNode<?, ?>, ValidationFailReason> failedNodes;
+	private final Map<ConfigNode<?, ?>, ValidationFailResult> failedNodes;
 	
 	private String message = null;
 	
-	private ConfigValidationResult(Map<ConfigNode<?, ?>, ValidationFailReason> failedNodes) {
+	private ConfigValidationResult(Map<ConfigNode<?, ?>, ValidationFailResult> failedNodes) {
 		this.failedNodes = failedNodes;
 	}
 	
@@ -25,9 +25,9 @@ public class ConfigValidationResult {
 	
 	/**
 	 * 
-	 * @return An unmodifiable map of the nodes that failed and their fail reason (empty if none)
+	 * @return An unmodifiable map of the nodes that failed and their fail reason and message (empty if none)
 	 */
-	public Map<ConfigNode<?, ?>, ValidationFailReason> getFailedNodes() {
+	public Map<ConfigNode<?, ?>, ValidationFailResult> getFailedNodes() {
 		return failedNodes;
 	}
 	
@@ -43,8 +43,12 @@ public class ConfigValidationResult {
 			return message = "All configuration options are valid.";
 		}
 		StringBuilder builder = new StringBuilder("The following configuration options are invalid or missing:" + System.lineSeparator());
-		for(Entry<ConfigNode<?, ?>, ValidationFailReason> entry : failedNodes.entrySet()) {
-			builder.append(entry.getKey().getPath()).append(" : ").append(entry.getValue().getFriendlyName());
+		for(Entry<ConfigNode<?, ?>, ValidationFailResult> entry : failedNodes.entrySet()) {
+			builder.append(entry.getKey().getPath()).append(" : ").append(entry.getValue().getReason().getFriendlyName());
+			String msg = entry.getValue().getMessage();
+			if(msg != null && !msg.isEmpty()) {
+				builder.append(" - ").append(msg);
+			}
 		}
 		return message = builder.toString();
 	}
@@ -65,14 +69,34 @@ public class ConfigValidationResult {
 		}
 	}
 	
+	public static class ValidationFailResult {
+		
+		private final ValidationFailReason reason;
+		private final String message;
+		
+		protected ValidationFailResult(ValidationFailReason reason, String message) {
+			this.reason = reason;
+			this.message = message;
+		}
+		
+		public ValidationFailReason getReason() {
+			return reason;
+		}
+		
+		public String getMessage() {
+			return message;
+		}
+		
+	}
+	
 	protected static class Builder {
 		
-		private Map<ConfigNode<?, ?>, ValidationFailReason> nodeMap;
+		private Map<ConfigNode<?, ?>, ValidationFailResult> nodeMap;
 		
 		private boolean built = false;
 		
 		private Builder() {
-			nodeMap = new HashMap<ConfigNode<?,?>, ValidationFailReason>();
+			nodeMap = new HashMap<ConfigNode<?,?>, ValidationFailResult>();
 		}
 		
 		/**
@@ -81,12 +105,16 @@ public class ConfigValidationResult {
 		 * @param reason
 		 * @return {@code this}
 		 * @throws IllegalStateException if builder has already been built
+		 * @throws IllegalArgumentException if reason is null
 		 */
-		protected Builder addNode(ConfigNode<?, ?> node, ValidationFailReason reason) {
+		protected Builder addNode(ConfigNode<?, ?> node, ValidationFailReason reason, String message) {
 			if(built) {
 				throw new IllegalStateException("Cannot add node to builder that has already been built");
 			}
-			nodeMap.put(node, reason);
+			if(reason == null) {
+				throw new IllegalArgumentException("Reason cannot be null");
+			}
+			nodeMap.put(node, new ValidationFailResult(reason, message));
 			return this;
 		}
 		

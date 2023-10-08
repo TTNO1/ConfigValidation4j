@@ -3,6 +3,7 @@ package me.ttno1.configvalidation;
 import java.util.List;
 
 import me.ttno1.configvalidation.ConfigValidationResult.ValidationFailReason;
+import me.ttno1.configvalidation.ConfigValidationResult.ValidationFailResult;
 
 public class ConfigNode<T, U> {
 	
@@ -40,9 +41,9 @@ public class ConfigNode<T, U> {
 	 * @param configDictionary
 	 * @return the fail reason if it failed or null if it passed
 	 */
-	protected ValidationFailReason validate(ConfigDictionary configDictionary) {
+	protected ValidationFailResult validate(ConfigDictionary configDictionary) {
 		if(!configDictionary.containsNode(path)) {
-			return ValidationFailReason.MISSING;
+			return new ValidationFailResult(ValidationFailReason.MISSING, null);
 		}
 		
 		boolean isValidType = switch (baseType) {
@@ -70,7 +71,7 @@ public class ConfigNode<T, U> {
 			yield true;
 		};
 		if(!isValidType) {
-			return ValidationFailReason.INVALID_TYPE;
+			return new ValidationFailResult(ValidationFailReason.INVALID_TYPE, null);
 		}
 		
 		@SuppressWarnings("unchecked")
