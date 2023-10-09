@@ -1,7 +1,5 @@
 package me.ttno1.configvalidation;
 
-import java.util.List;
-
 import me.ttno1.configvalidation.ConfigValidationResult.ValidationFailReason;
 import me.ttno1.configvalidation.ConfigValidationResult.ValidationFailResult;
 
@@ -9,9 +7,9 @@ public class ConfigNode<T, U> {
 	
 	protected final String path;
 	
-	private ConfigFilter<T, U> filter;
+	protected ConfigFilter<T, U> filter;
 	
-	private U result;
+	protected ConfigFilterResult<U> result;
 	
 	protected final BaseType baseType;
 	
@@ -58,7 +56,7 @@ public class ConfigNode<T, U> {
 		case INTEGER:
 			yield configDictionary.isInteger(path);
 		case LIST:
-			yield configDictionary.isList(path);
+			throw new UnsupportedOperationException("Cannot validate list outside of ConfigList class");
 		case LONG:
 			yield configDictionary.isLong(path);
 		case MAP:
@@ -67,8 +65,6 @@ public class ConfigNode<T, U> {
 			yield configDictionary.isShort(path);
 		case STRING:
 			yield configDictionary.isString(path);
-		case UNKNOWN:
-			yield true;
 		};
 		if(!isValidType) {
 			return new ValidationFailResult(ValidationFailReason.INVALID_TYPE, null);
@@ -77,30 +73,28 @@ public class ConfigNode<T, U> {
 		@SuppressWarnings("unchecked")
 		boolean passedFilter = switch (baseType) {
 		case BOOLEAN:
-			yield ((ConfigNode<Boolean, ?>) this).filter(configDictionary.getBoolean(path));
+			yield ((ConfigNode<Boolean, U>) this).filter(configDictionary.getBoolean(path));
 		case BYTE:
-			yield ((ConfigNode<Byte, ?>) this).filter(configDictionary.getByte(path));
+			yield ((ConfigNode<Byte, U>) this).filter(configDictionary.getByte(path));
 		case DOUBLE:
-			yield ((ConfigNode<Double, ?>) this).filter(configDictionary.getDouble(path));
+			yield ((ConfigNode<Double, U>) this).filter(configDictionary.getDouble(path));
 		case FLOAT:
-			yield ((ConfigNode<Float, ?>) this).filter(configDictionary.getFloat(path));
+			yield ((ConfigNode<Float, U>) this).filter(configDictionary.getFloat(path));
 		case INTEGER:
-			yield ((ConfigNode<Integer, ?>) this).filter(configDictionary.getInteger(path));
+			yield ((ConfigNode<Integer, U>) this).filter(configDictionary.getInteger(path));
 		case LIST:
-			yield ((ConfigNode<List<?>, ?>) this).filter(configDictionary.getList(path));
+			throw new UnsupportedOperationException("Cannot validate list outside of ConfigList class");
 		case LONG:
-			yield ((ConfigNode<Long, ?>) this).filter(configDictionary.getLong(path));
+			yield ((ConfigNode<Long, U>) this).filter(configDictionary.getLong(path));
 		case MAP:
-			yield ((ConfigNode<ConfigDictionary, ?>) this).filter(configDictionary.getConfigDictionary(path));
+			yield ((ConfigNode<ConfigDictionary, U>) this).filter(configDictionary.getConfigDictionary(path));
 		case SHORT:
-			yield ((ConfigNode<Short, ?>) this).filter(configDictionary.getShort(path));
+			yield ((ConfigNode<Short, U>) this).filter(configDictionary.getShort(path));
 		case STRING:
-			yield ((ConfigNode<String, ?>) this).filter(configDictionary.getString(path));
-		case UNKNOWN:
-			yield ((ConfigNode<Object, ?>) this).filter(configDictionary.getObject(path));
+			yield ((ConfigNode<String, U>) this).filter(configDictionary.getString(path));
 		};
 		if(!passedFilter) {
-			return ValidationFailReason.FAILED_FILTER;
+			return new ValidationFailResult(ValidationFailReason.FAILED_FILTER, result.getFailMessage());
 		}
 		
 		return null;
@@ -112,30 +106,34 @@ public class ConfigNode<T, U> {
 	 * @return true if filter passed false otherwise
 	 * @throws IllegalStateException if this {@link ConfigNode} has already been filtered
 	 */
-	protected boolean filter(T input) {
+	protected ConfigFilterResult<U> filter(T input) {//TODO return value?
 		if(filter == null) {
 			throw new IllegalStateException("Cannot filter ConfigNode more than once");
 		}
-		ConfigFilterResult<U> filterResult = filter.filter(input);
+		result = filter.filter(input);
 		filter = null;
-		if(filterResult.passed()) {
-			result = filterResult.getResult();
-			return true;
-		}
-		return false;
+		return result;
+	}
+	
+	protected ConfigFilterResult<U> getFilterResult() {
+		return result;
+	}
+	
+	protected BaseType getBaseType() {
+		return baseType;
 	}
 	
 	/**
 	 * Note: this method should not be called before the node has been filtered. 
 	 * The node is filtered when it or its containing {@link ConfigSpec} is validated.
 	 * @return the filtered result of this node if it has already been filtered
-	 * @throws IllegalStateException if this {@link ConfigNode} has not yet been filtered
+	 * @throws IllegalStateException if this {@link ConfigNode} has not yet been filtered or the filter failed
 	 */
 	public U getResult() {
 		if(filter != null) {
 			throw new IllegalStateException("Cannot get result before filtering ConfigNode");
 		}
-		return result;
+		return result.getResult();
 	}
 	
 	/**
@@ -144,10 +142,6 @@ public class ConfigNode<T, U> {
 	 */
 	public String getPath() {
 		return path;
-	}
-	
-	protected BaseType getBaseType() {
-		return baseType;
 	}
 
 	protected enum BaseType {
@@ -160,8 +154,7 @@ public class ConfigNode<T, U> {
 		LONG,
 		MAP,
 		SHORT,
-		STRING,
-		UNKNOWN;
+		STRING;
 	}
 	
 }

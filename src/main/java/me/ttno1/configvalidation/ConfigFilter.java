@@ -9,7 +9,7 @@ public interface ConfigFilter<T, U> {
 		return (T in) -> {
 			ConfigFilterResult<U> result = filter(in);
 			if(!result.passed()) {
-				return ConfigFilterResult.fail();
+				return ConfigFilterResult.fail(result.getFailMessage());
 			}
 			return filter.filter(result.getResult());
 		};

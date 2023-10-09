@@ -29,7 +29,7 @@ public final class ConfigFilters {
 			for(T in : input) {
 				ConfigFilterResult<U> filterResult = filter.filter(in);
 				if(!filterResult.passed()) {
-					return ConfigFilterResult.fail();
+					return ConfigFilterResult.fail(filterResult.getFailMessage());
 				}
 				result.add(filterResult.getResult());
 			}
