@@ -1,0 +1,36 @@
+<config>
+	<doubleList>478.88</doubleList>
+	<doubleList>78.33</doubleList>
+	<doubleList>1.234567890123456</doubleList>
+	<doubleList>999281000.1</doubleList>
+	<doubleList>51469.000</doubleList>
+	<nestedList>
+		<string>a</string>
+		<string>b</string>
+		<string>c</string>
+	</nestedList>
+	<nestedList>
+		<string>d</string>
+		<string>e</string>
+		<string>f</string>
+	</nestedList>
+	<nestedList>
+		<string>g</string>
+		<string>h</string>
+		<string>i</string>
+	</nestedList>
+	<configSectionList>
+		<section>
+			<title>ABC</title>
+			<description>a b c</description>
+		</section>
+		<section>
+			<title>DEF</title>
+			<description>d e f</description>
+		</section>
+		<section>
+			<title>GHI</title>
+			<description>g h i</description>
+		</section>
+	</configSectionList>
+</config>

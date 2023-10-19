@@ -1,5 +1,10 @@
 package me.ttno1.configvalidation;
 
+/**
+ * Represents the result of a {@linkplain ConfigFilter}.<br>
+ * Specifies whether it passed or failed, the output if it passed, and the fail message if it failed.
+ * @param <T> the output type
+ */
 class ConfigFilterResult<T> {
 
 	private final boolean pass;
@@ -42,12 +47,33 @@ class ConfigFilterResult<T> {
 		return failMsg;
 	}
 	
+	/**
+	 * Creates a new ConfigFilterResult that passed with the specified output.
+	 * @param <U> the output type
+	 * @param result the output
+	 * @return a new ConfigFilterResult that passed with the specified output
+	 */
 	protected static <U> ConfigFilterResult<U> pass(U result) {
 		return new ConfigFilterResult<U>(true, result, null);
 	}
 	
+	/**
+	 * Creates a new ConfigFilterResult that failed with the specified fail message.
+	 * @param <U> the output type
+	 * @param message the fail message
+	 * @return a new ConfigFilterResult that failed with the specified fail message
+	 */
 	protected static <U> ConfigFilterResult<U> fail(String message) {
 		return new ConfigFilterResult<U>(false, null, message);
+	}
+	
+	/**
+	 * Creates a new ConfigFilterResult that failed with an empty fail message.
+	 * @param <U> the output type
+	 * @return a new ConfigFilterResult that failed
+	 */
+	protected static <U> ConfigFilterResult<U> fail() {
+		return fail("");
 	}
 
 }

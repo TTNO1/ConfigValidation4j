@@ -1,160 +1,146 @@
 package me.ttno1.configvalidation;
 
-import me.ttno1.configvalidation.ConfigValidationResult.ValidationFailReason;
-import me.ttno1.configvalidation.ConfigValidationResult.ValidationFailResult;
-
+/**
+ * Represents a node that should exist in a configuration.<br>
+ * Specifies a data type and a filter that a configuration node should match.<br>
+ * When a node is validated against a ConfigWrapper, the type of the node is verified to be correct 
+ * and the filter is confirmed to have passed.
+ * @param <T> the data type of this node
+ * @param <U> the output type of this ConfigNodes's filter.
+ */
 public class ConfigNode<T, U> {
-	
-	protected final String path;
+	//TODO memory cleanup method?
 	
 	protected ConfigFilter<T, U> filter;
 	
-	protected ConfigFilterResult<U> result;
-	
 	protected final BaseType baseType;
 	
-	protected ConfigNode(String path, ConfigFilter<T, U> filter, BaseType baseType) {
+	protected ConfigNode(ConfigFilter<T, U> filter, BaseType baseType) {
 		
-		if(path == null) {
-			throw new IllegalArgumentException("Path cannot be null");
-		}
 		if(filter == null) {
-			throw new IllegalArgumentException("Filter cannot be null");
+			throw new NullPointerException("Filter cannot be null");
 		}
 		if(baseType == null) {
-			throw new IllegalArgumentException("BaseType cannot be null");
+			throw new NullPointerException("BaseType cannot be null");
 		}
 		
-		this.path = path;
 		this.filter = filter;
 		this.baseType = baseType;
 		
 	}
 	
 	/**
-	 * Validates this node against the supplied {@link ConfigDictionary}.<br>
-	 * Does not validate sub-nodes if this is a {@link ConfigSpec}.<br>
-	 * Checks for existence, valid type, and filter pass.<br>
-	 * Should only be called once.
-	 * @param configDictionary
-	 * @return the fail reason if it failed or null if it passed
+	 * For use in ConfigSpec where filter must be set later.<br>
+	 * <b>Always be sure to set and null-check filter later when using this constructor.</b>
+	 * @param baseType
 	 */
-	protected ValidationFailResult validate(ConfigDictionary configDictionary) {
-		if(!configDictionary.containsNode(path)) {
-			return new ValidationFailResult(ValidationFailReason.MISSING, null);
+	protected ConfigNode(BaseType baseType) {
+		
+		if(baseType == null) {
+			throw new NullPointerException("BaseType cannot be null");
+		}
+		
+		this.baseType = baseType;
+		
+	}
+	
+	/**
+	 * Convenience method that returns a new ConfigNode with the provided filter appended onto the current filter using
+	 * {@link ConfigFilter#withFilter(ConfigFilter)}.
+	 * @param <V> the return type of the new filter
+	 * @param filter the filter to append to the current filter
+	 * @return a new ConfigNode with the provided filter appended onto the current filter
+	 */
+	public <V> ConfigNode<T, V> withFilter(ConfigFilter<U, V> filter) {
+		return new ConfigNode<T, V>(this.filter.withFilter(filter), baseType);
+	}
+	
+	/**
+	 * Validates this node against the supplied {@link ConfigWrapper} at the specified path.<br>
+	 * Checks for existence of the node, valid data type, and filter passage.<br>
+	 * @param configWrapper the {@link ConfigWrapper} to validate against
+	 * @param path the absolute path of this node in the ConfigWrapper
+	 * @return a {@link ConfigValidationResult} containing whether the validation was successful and a fail message if it failed
+	 * @throws NullPointerException if {@code configWrapper} or {@code path} are null
+	 */
+	public ConfigValidationResult validate(ConfigWrapper configWrapper, String path) {
+		if(configWrapper == null) {
+			throw new NullPointerException("Config wrapper cannot be null");
+		}
+		if(path == null) {
+			throw new NullPointerException("Path cannot be null");
+		}
+		
+		if(!configWrapper.containsNode(path)) {
+			return ConfigValidationResult.fail("The node is not contained in the config");
 		}
 		
 		boolean isValidType = switch (baseType) {
 		case BOOLEAN:
-			yield configDictionary.isBoolean(path);
+			yield configWrapper.isBoolean(path);
 		case BYTE:
-			yield configDictionary.isByte(path);
+			yield configWrapper.isByte(path);
 		case DOUBLE:
-			yield configDictionary.isDouble(path);
+			yield configWrapper.isDouble(path);
 		case FLOAT:
-			yield configDictionary.isFloat(path);
+			yield configWrapper.isFloat(path);
 		case INTEGER:
-			yield configDictionary.isInteger(path);
+			yield configWrapper.isInteger(path);
 		case LIST:
 			throw new UnsupportedOperationException("Cannot validate list outside of ConfigList class");
 		case LONG:
-			yield configDictionary.isLong(path);
-		case MAP:
-			yield configDictionary.isConfigDictionary(path);
+			yield configWrapper.isLong(path);
+		case CONFIG_SECTION:
+			yield configWrapper.isConfigSubsection(path);
 		case SHORT:
-			yield configDictionary.isShort(path);
+			yield configWrapper.isShort(path);
 		case STRING:
-			yield configDictionary.isString(path);
+			yield configWrapper.isString(path);
 		};
 		if(!isValidType) {
-			return new ValidationFailResult(ValidationFailReason.INVALID_TYPE, null);
+			return ConfigValidationResult.fail("The node is not of type: " + baseType.toString());
 		}
 		
 		@SuppressWarnings("unchecked")
-		boolean passedFilter = switch (baseType) {
+		ConfigFilterResult<U> filterResult = switch (baseType) {
 		case BOOLEAN:
-			yield ((ConfigNode<Boolean, U>) this).filter(configDictionary.getBoolean(path));
+			yield ((ConfigNode<Boolean, U>) this).filter(configWrapper.getBoolean(path));
 		case BYTE:
-			yield ((ConfigNode<Byte, U>) this).filter(configDictionary.getByte(path));
+			yield ((ConfigNode<Byte, U>) this).filter(configWrapper.getByte(path));
 		case DOUBLE:
-			yield ((ConfigNode<Double, U>) this).filter(configDictionary.getDouble(path));
+			yield ((ConfigNode<Double, U>) this).filter(configWrapper.getDouble(path));
 		case FLOAT:
-			yield ((ConfigNode<Float, U>) this).filter(configDictionary.getFloat(path));
+			yield ((ConfigNode<Float, U>) this).filter(configWrapper.getFloat(path));
 		case INTEGER:
-			yield ((ConfigNode<Integer, U>) this).filter(configDictionary.getInteger(path));
+			yield ((ConfigNode<Integer, U>) this).filter(configWrapper.getInteger(path));
 		case LIST:
 			throw new UnsupportedOperationException("Cannot validate list outside of ConfigList class");
 		case LONG:
-			yield ((ConfigNode<Long, U>) this).filter(configDictionary.getLong(path));
-		case MAP:
-			yield ((ConfigNode<ConfigDictionary, U>) this).filter(configDictionary.getConfigDictionary(path));
+			yield ((ConfigNode<Long, U>) this).filter(configWrapper.getLong(path));
+		case CONFIG_SECTION:
+			yield ((ConfigNode<ConfigWrapper, U>) this).filter(configWrapper.getConfigSubsection(path));
 		case SHORT:
-			yield ((ConfigNode<Short, U>) this).filter(configDictionary.getShort(path));
+			yield ((ConfigNode<Short, U>) this).filter(configWrapper.getShort(path));
 		case STRING:
-			yield ((ConfigNode<String, U>) this).filter(configDictionary.getString(path));
+			yield ((ConfigNode<String, U>) this).filter(configWrapper.getString(path));
 		};
-		if(!passedFilter) {
-			return new ValidationFailResult(ValidationFailReason.FAILED_FILTER, result.getFailMessage());
+		if(!filterResult.passed()) {
+			return ConfigValidationResult.fail("The node's filter failed with the following message: " + filterResult.getFailMessage());
 		}
 		
-		return null;
+		return ConfigValidationResult.pass();
 	}
 	
-	/**
-	 * 
-	 * @param input
-	 * @return true if filter passed false otherwise
-	 * @throws IllegalStateException if this {@link ConfigNode} has already been filtered
-	 */
-	protected ConfigFilterResult<U> filter(T input) {//TODO return value?
-		if(filter == null) {
-			throw new IllegalStateException("Cannot filter ConfigNode more than once");
-		}
-		result = filter.filter(input);
-		filter = null;
-		return result;
+	protected ConfigFilterResult<U> filter(T input) {
+		return filter.filter(input);
 	}
 	
-	protected ConfigFilterResult<U> getFilterResult() {
-		return result;
+	protected ConfigFilter<T, U> getFilter() {
+		return filter;
 	}
 	
 	protected BaseType getBaseType() {
 		return baseType;
-	}
-	
-	/**
-	 * Note: this method should not be called before the node has been filtered. 
-	 * The node is filtered when it or its containing {@link ConfigSpec} is validated.
-	 * @return the filtered result of this node if it has already been filtered
-	 * @throws IllegalStateException if this {@link ConfigNode} has not yet been filtered or the filter failed
-	 */
-	public U getResult() {
-		if(filter != null) {
-			throw new IllegalStateException("Cannot get result before filtering ConfigNode");
-		}
-		return result.getResult();
-	}
-	
-	/**
-	 * 
-	 * @return the path of this node
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	protected enum BaseType {
-		BOOLEAN,
-		BYTE,
-		DOUBLE,
-		FLOAT,
-		INTEGER,
-		LIST,
-		LONG,
-		MAP,
-		SHORT,
-		STRING;
 	}
 	
 }

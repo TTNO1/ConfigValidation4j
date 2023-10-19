@@ -1,0 +1,23 @@
+topBoolean: true
+topByte: 127
+topDouble: 1.234567890123456
+topFloat: 1.234567
+topInteger: 2147483647
+topLong: 9223372036854775807
+topShort: 32767
+topString: Test Config String value 1234 false
+topPath: 'C:\test\path\dir\file.txt'
+topUrl: https://www.example.com
+topEnum: test enum value
+node:
+    subBoolean: true
+    subByte: 127
+    subDouble: 1.234567890123456
+    subFloat: 1.234567
+    subInteger: 2147483647
+    subLong: 9223372036854775807
+    subShort: 32767
+    subString: Test Config String value 1234 false
+    subPath: 'C:\test\path\dir\file.txt'
+    subUrl: https://www.example.com
+    subEnum: test enum value

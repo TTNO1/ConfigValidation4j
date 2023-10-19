@@ -1,0 +1,26 @@
+<config>
+	<topBoolean>true</topBoolean>
+	<topByte>127</topByte>
+	<topDouble>1.234567890123456</topDouble>
+	<topFloat>1.234567</topFloat>
+	<topInteger>2147483647</topInteger>
+	<topLong>9223372036854775807</topLong>
+	<topShort>32767</topShort>
+	<topString>Test Config String value 1234 false</topString>
+	<topPath>C:\test\path\dir\file.txt</topPath>
+	<topUrl>https://www.example.com</topUrl>
+	<topEnum>test enum value</topEnum>
+	<node>
+		<subBoolean>true</subBoolean>
+		<subByte>127</subByte>
+		<subDouble>1.234567890123456</subDouble>
+		<subFloat>1.234567</subFloat>
+		<subInteger>2147483647</subInteger>
+		<subLong>9223372036854775807</subLong>
+		<subShort>32767</subShort>
+		<subString>Test Config String value 1234 false</subString>
+		<subPath>C:\test\path\dir\file.txt</subPath>
+		<subUrl>https://www.example.com</subUrl>
+		<subEnum>test enum value</subEnum>
+	</node>
+</config>

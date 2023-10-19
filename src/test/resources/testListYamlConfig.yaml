@@ -1,0 +1,23 @@
+doubleList:
+  - 478.88
+  - 78.33
+  - 1.234567890123456
+  - 999281000.1
+  - 51469.000
+nestedList:
+  - - a
+    - b
+    - c
+  - - d
+    - e
+    - f
+  - - g
+    - h
+    - i
+configSectionList:
+  - title: ABC
+    description: a b c
+  - title: DEF
+    description: d e f
+  - title: GHI
+    description: g h i
