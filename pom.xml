@@ -13,11 +13,26 @@
 	<inceptionYear>2023</inceptionYear>
 	<developers>
 		<developer>
-			<id></id>
+			<id>${io.github.ttno1.configvalidation.author}</id>
 			<name>${io.github.ttno1.configvalidation.author}</name>
 			<url>https://www.github.com/ttno1</url>
 		</developer>
 	</developers>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>
+				https://raw.githubusercontent.com/TTNO1/ConfigValidation4j/master/LICENSE</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com/TTNO1/ConfigValidation4j.git</connection>
+		<developerConnection>
+			scm:git:ssh://github.com:TTNO1/ConfigValidation4j.git</developerConnection>
+		<url>https://github.com/TTNO1/ConfigValidation4j</url>
+	</scm>
 
 	<properties>
 		<io.github.ttno1.configvalidation.author>TTNO1</io.github.ttno1.configvalidation.author>
@@ -105,6 +120,27 @@
 					<reportOutputDirectory>docs</reportOutputDirectory>
 					<destDir>/</destDir>
 				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
