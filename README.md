@@ -1,7 +1,7 @@
 # ConfigValidation4j
 A Java library for easily validating configurations before the configuration data is needed.
 
-[Javadoc](https://todo)
+[Javadoc](https://ttno1.github.io/ConfigValidation4j/)
 
 ## How to use
 ### Main Classes
