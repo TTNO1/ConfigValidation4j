@@ -7,7 +7,7 @@
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>Config Validation</name>
+	<name>ConfigValidation4j</name>
 	<description>A Java library for easy validation of configuration files.</description>
 	<url>https://github.com/TTNO1/ConfigValidation4j</url>
 	<inceptionYear>2023</inceptionYear>
