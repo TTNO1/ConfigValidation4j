@@ -30,18 +30,18 @@ public class ConfigListTest {
 		
 		ConfigWrapper wrapper = new CommonsConfigWrapper(assertDoesNotThrow(() -> {return new Configurations().xml(ConfigNodeTest.class.getResource("/testListXmlConfig.xml"));}));
 		
-		ConfigValidationResult result = Config.newSpec()
-				.addNode("doubleList", Config.List.ofDouble(ConfigFilter.run(list -> {
+		ConfigValidationResult result = Cfg.newSpec()
+				.addNode("doubleList", Cfg.List.ofDouble(ConfigFilter.run(list -> {
 					assertEquals(list, List.of(478.88, 78.33, 1.234567890123456, 999281000.1, 51469.000));
 				}), ConfigFilter.nullFilter()))
-				.addNode("nestedList.string", Config.List.ofString(ConfigFilter.run((list) -> {
+				.addNode("nestedList.string", Cfg.List.ofString(ConfigFilter.run((list) -> {
 					assertEquals(list, List.of("a", "b", "c", "d", "e", "f", "g", "h", "i"));
 				}), ConfigFilter.nullFilter()))
-				.addNode("configSectionList.section", Config.List.ofConfigSpec(ConfigFilter.nullFilter(),
-						Config.newSpec().addNode("title", Config.Node.ofString((s) -> {
+				.addNode("configSectionList.section", Cfg.List.ofConfigSpec(ConfigFilter.nullFilter(),
+						Cfg.newSpec().addNode("title", Cfg.Node.ofString((s) -> {
 							i += 2;
 							return s.equals(sectionListContent[i]) ? ConfigFilterResult.pass(s) : ConfigFilterResult.fail(s);
-						})).addNode("description", Config.Node.ofString((s) -> {
+						})).addNode("description", Cfg.Node.ofString((s) -> {
 							j += 2;
 							return s.equals(sectionListContent[j]) ? ConfigFilterResult.pass(s) : ConfigFilterResult.fail(s);
 						}))))
@@ -58,18 +58,18 @@ public class ConfigListTest {
 		ConfigWrapper wrapper = new SnakeYamlConfigWrapper(new Yaml().load(yamlStream));
 		assertDoesNotThrow(yamlStream::close);
 		
-		ConfigValidationResult result = Config.newSpec()
-				.addNode("doubleList", Config.List.ofDouble(ConfigFilter.run(list -> {
+		ConfigValidationResult result = Cfg.newSpec()
+				.addNode("doubleList", Cfg.List.ofDouble(ConfigFilter.run(list -> {
 					assertEquals(list, List.of(478.88, 78.33, 1.234567890123456, 999281000.1, 51469.000));
 				}), ConfigFilter.nullFilter()))
-				.addNode("nestedList", Config.List.ofList(ConfigFilter.run((list) -> {
+				.addNode("nestedList", Cfg.List.ofList(ConfigFilter.run((list) -> {
 					assertEquals(list, List.of(List.of("a", "b", "c"), List.of("d", "e", "f"), List.of("g", "h", "i")));
 				}), ConfigFilter.nullFilter()))
-				.addNode("configSectionList", Config.List.ofConfigSpec(ConfigFilter.nullFilter(),
-						Config.newSpec().addNode("title", Config.Node.ofString((s) -> {
+				.addNode("configSectionList", Cfg.List.ofConfigSpec(ConfigFilter.nullFilter(),
+						Cfg.newSpec().addNode("title", Cfg.Node.ofString((s) -> {
 							i += 2;
 							return s.equals(sectionListContent[i]) ? ConfigFilterResult.pass(s) : ConfigFilterResult.fail(s);
-						})).addNode("description", Config.Node.ofString((s) -> {
+						})).addNode("description", Cfg.Node.ofString((s) -> {
 							j += 2;
 							return s.equals(sectionListContent[j]) ? ConfigFilterResult.pass(s) : ConfigFilterResult.fail(s);
 						}))))
