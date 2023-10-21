@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
- * A Configuration Specification that specifies various {@linkplain ConfigNodes} that must be present in a configuration.<br>
+ * A Configuration Specification that specifies various {@linkplain ConfigNode}s that must be present in a configuration.<br>
  * This class is used to validate a config with many nodes.<br>
  * Specifies list of nodes and their corresponding locations (paths) in the configuration.<br>
  * When a ConfigSpec is validated against a {@linkplain ConfigWrapper}, each of its contained nodes are validated as well.
@@ -69,7 +69,7 @@ public class ConfigSpec<U> extends ConfigNode<ConfigWrapper, U> {
 	/**
 	 * Adds the specified nodes to this ConfigSpec at their corresponding paths.<br>
 	 * Replaces any nodes that were previously at any specified paths.
-	 * @param nodeMap a map of relative paths to {@link ConfigNodes} that should be present in this ConfigSpec
+	 * @param nodeMap a map of relative paths to {@link ConfigNode}s that should be present in this ConfigSpec
 	 * @return {@code this}
 	 * @throws NullPointerException if {@code nodeMap} is null or contains null keys or values
 	 */

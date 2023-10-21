@@ -95,6 +95,17 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<show>public</show>
+					<doclint>all,-missing</doclint>
+					<reportOutputDirectory>docs</reportOutputDirectory>
+					<destDir>/</destDir>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
