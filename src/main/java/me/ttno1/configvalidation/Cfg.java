@@ -3,9 +3,9 @@ package me.ttno1.configvalidation;
 /**
  * Factory class for creating {@linkplain ConfigNode}s, {@linkplain ConfigList}s, and {@linkplain ConfigSpec}s.
  */
-public final class Config {
+public final class Cfg {
 	
-	private Config() {}
+	private Cfg() {}
 	
 	public static <W> ConfigSpec<W> newSpec(ConfigFilter<ConfigWrapper, W> filter){
 		return new ConfigSpec<W>(filter);
