@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>me.ttno1</groupId>
+	<groupId>io.github.ttno1</groupId>
 	<artifactId>configvalidation</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
@@ -14,13 +14,13 @@
 	<developers>
 		<developer>
 			<id></id>
-			<name>${me.ttno1.configvalidation.author}</name>
+			<name>${io.github.ttno1.configvalidation.author}</name>
 			<url>https://www.github.com/ttno1</url>
 		</developer>
 	</developers>
 
 	<properties>
-		<me.ttno1.configvalidation.author>TTNO1</me.ttno1.configvalidation.author>
+		<io.github.ttno1.configvalidation.author>TTNO1</io.github.ttno1.configvalidation.author>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,7 +64,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Built-By>${me.ttno1.configvalidation.author}</Built-By>
+							<Built-By>${io.github.ttno1.configvalidation.author}</Built-By>
 							<url>${project.url}</url>
 						</manifestEntries>
 					</archive>
@@ -89,7 +89,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Built-By>${me.ttno1.configvalidation.author}</Built-By>
+							<Built-By>${io.github.ttno1.configvalidation.author}</Built-By>
 							<url>${project.url}</url>
 						</manifestEntries>
 					</archive>
