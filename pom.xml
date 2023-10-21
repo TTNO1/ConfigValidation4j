@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.ttno1</groupId>
 	<artifactId>configvalidation</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>Config Validation</name>
-	<description></description>
-	<url></url>
+	<description>A Java library for easy validation of configuration files.</description>
+	<url>https://github.com/TTNO1/ConfigValidation4j</url>
 	<inceptionYear>2023</inceptionYear>
 	<developers>
 		<developer>
