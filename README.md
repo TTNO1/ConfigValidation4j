@@ -1,4 +1,14 @@
-# ConfigValidation4j
+<p align="center">
+	<img src="https://ttno1.github.io/ConfigValidation4j/logo.png" width="auto" height="150px" alt="Logo"><br><br>
+	<a href="https://github.com/ttno1/configvalidation4j/releases/"><img src="https://img.shields.io/github/release/ttno1/configvalidation4j?include_prereleases=&sort=semver" alt="Github Release"></a>
+	<a href="https://github.com/TTNO1/ConfigValidation4j/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
+	<a href="https://github.com/ttno1/configvalidation4j/issues"><img src="https://img.shields.io/github/issues/ttno1/configvalidation4j" alt="Issues"></a>
+	<img src="https://img.shields.io/github/actions/workflow/status/ttno1/configvalidation4j/deploy.yml" alt="Build"><br>
+	<img src="https://img.shields.io/github/stars/ttno1/configvalidation4j?color=yellow" alt="Stars">
+	<img src="https://img.shields.io/github/forks/ttno1/configvalidation4j?color=yellow" alt="Forks">
+</p>
+
+## Overview
 A Java library for easily validating configurations before the configuration data is needed.<br><br>
 Instead of getting a value from a configuration when you need it and supplying a default value if it is invalid, this library allows you to validate the entire configuration 
 at initialization. It supports basic type checking for all Java primitives, lists, and configuration subsections (maps) as well as validating more advanced "filters" that can be 
