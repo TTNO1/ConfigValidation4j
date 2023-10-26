@@ -1,8 +1,18 @@
 # ConfigValidation4j
-A Java library for easily validating configurations before the configuration data is needed.
-
+A Java library for easily validating configurations before the configuration data is needed.<br><br>
+Instead of getting a value from a configuration when you need it and supplying a default value if it is invalid, this library allows you to validate the entire configuration 
+at initialization. It supports basic type checking for all Java primitives, lists, and configuration subsections (maps) as well as validating more advanced "filters" that can be 
+written by you or selected from a provided set of common filters. Filters also allow you to convert the configuration data into a new type, such as from a String to a URI, to make 
+life easier when you need to access the data later.
+#### Maven
+```xml
+<dependency>
+	<groupId>io.github.ttno1</groupId>
+	<artifactId>configvalidation</artifactId>
+	<version>1.0.0</version>
+</dependency>
+```
 [Javadoc](https://ttno1.github.io/ConfigValidation4j/)
-
 ## How to use
 ### Main Classes
 - `ConfigSpec` - Represents a specification that a config must meet in order to be valid.
@@ -68,6 +78,29 @@ if(!result.passed()) {
 	//do something when config is invalid
 	System.out.println(result.getFailMessage());
 }
+```
+### Dependencies
+In order to use this library with SnakeYAML, Apache Commons Configuration, or Apache Commons Validator (for URL validation), you must include those dependencies separately.
+For your convenience, here are the maven snippets for those dependencies.
+```xml
+<!--SnakeYAML-->
+<dependency>
+	<groupId>org.yaml</groupId>
+	<artifactId>snakeyaml</artifactId>
+	<version>2.2</version>
+</dependency>
+<!--Commons Configuration-->
+<dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-configuration2</artifactId>
+	<version>2.9.0</version>
+</dependency>
+<!--Commons Validator-->
+<dependency>
+	<groupId>commons-validator</groupId>
+	<artifactId>commons-validator</artifactId>
+	<version>1.7</version>
+</dependency>
 ```
 ### Limitations
 #### Underlying Limitations
