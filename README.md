@@ -2,6 +2,8 @@
 	<img src="https://ttno1.github.io/ConfigValidation4j/logo.png" width="auto" height="150px" alt="Logo"><br><br>
 	<a href="https://github.com/ttno1/configvalidation4j/releases/"><img src="https://img.shields.io/github/release/ttno1/configvalidation4j?include_prereleases=&sort=semver" alt="Github Release"></a>
 	<a href="https://github.com/TTNO1/ConfigValidation4j/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
+	<a href="https://central.sonatype.com/artifact/io.github.ttno1/configvalidation"><img src="https://img.shields.io/maven-central/v/io.github.ttno1/configvalidation" alt="Maven Central"></a>
+	<!--<a href="https://ttno1.github.io/ConfigValidation4j/"><img src="https://img.shields.io/maven-central/v/io.github.ttno1/configvalidation?label=javadoc" alt="Javadoc"></a>-->
 	<a href="https://github.com/ttno1/configvalidation4j/issues"><img src="https://img.shields.io/github/issues/ttno1/configvalidation4j" alt="Issues"></a>
 	<img src="https://img.shields.io/github/actions/workflow/status/ttno1/configvalidation4j/deploy.yml" alt="Build"><br>
 	<img src="https://img.shields.io/github/stars/ttno1/configvalidation4j?color=yellow" alt="Stars">
@@ -14,7 +16,7 @@ Instead of getting a value from a configuration when you need it and supplying a
 at initialization. It supports basic type checking for all Java primitives, lists, and configuration subsections (maps) as well as validating more advanced "filters" that can be 
 written by you or selected from a provided set of common filters. Filters also allow you to convert the configuration data into a new type, such as from a String to a URI, to make 
 life easier when you need to access the data later.
-#### Maven
+#### Maven Snippet
 ```xml
 <dependency>
 	<groupId>io.github.ttno1</groupId>
