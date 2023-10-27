@@ -12,7 +12,7 @@
 
 ## Overview
 A Java library for easily validating configurations before the configuration data is needed.<br><br>
-Instead of getting a value from a configuration when you need it and supplying a default value if it is invalid, this library allows you to validate the entire configuration 
+Instead of getting a value from a configuration when you need it and supplying a default value if it is invalid or missing, this library allows you to validate the entire configuration 
 at initialization. It supports basic type checking for all Java primitives, lists, and configuration subsections (maps) as well as validating more advanced "filters" that can be 
 written by you or selected from a provided set of common filters. Filters also allow you to convert the configuration data into a new type, such as from a String to a URI, to make 
 life easier when you need to access the data later.
