@@ -30,7 +30,7 @@ from a String to a URI, to make life easier when you need to access the data lat
 - `ConfigSpec` - Represents a specification that a config must meet in order to be valid.
 - `ConfigNode` - Represents an item in a config that must be present and (optionally) must meet certain requirements.
 - `ConfigList` - Similar to `ConfigNode` but for lists.
-- `ConfigFilter` - A functional interface that takes in a `ConigNode` value and returns whether it is valid or not. Can optionally transform the value into a new type.
+- `ConfigFilter` - A functional interface that takes in a config data value and returns whether it is valid or not. Can optionally transform the value into a new type.
 - `ConfigWrapper` - An interface that wraps a source of configuration data. This library has default implementations for Apache Commons Config and SnakeYAML.
 - `Cfg` - A class with static factory methods for constructing `ConfigSpec`s, `ConfigNode`s, and `ConfigList`s.
 - `ConfigFilters` - A utility class with common `ConfigFilters`.
