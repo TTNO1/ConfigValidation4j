@@ -10,13 +10,25 @@
 	<img src="https://img.shields.io/github/forks/ttno1/configvalidation4j?color=yellow" alt="Forks">
 </p>
 
-## Overview
+# Overview
 A Java library for easily validating configurations before the configuration data is needed.<br><br>
 Instead of getting a value from a configuration when you need it and supplying a default value if it is invalid or missing, this library allows you to validate the entire configuration 
-at initialization and stop if it is invalid. This library enables basic type checking for all Java primitives, lists, and configuration subsections (maps) as well as validating more 
-advanced "filters" that can be written by you or selected from a provided set of common filters. Filters also allow you to convert the configuration data into a new type, such as 
-from a String to a URI, to make life easier when you need to access the data later.
-#### Maven Snippet
+at initialization and stop if it is invalid. This library functions as a validation layer on top of whatever means you use to get your configuration data. It enables basic type checking 
+for all Java primitives, lists, and configuration subsections (maps) as well as validating more advanced "filters" that can be written by you or selected from a provided set of common 
+filters. Filters also allow you to convert the configuration data into a new type, such as from a String to a URI, to make life easier when you need to access the data later. That also 
+means that you can refer to configuration data in a "statically typed" way and no longer have to rely on passing string paths into getter methods hoping the return value will be what 
+you need.
+#### Strengths
+- Immediate validation of entire config
+- Works on top of any configuration source
+- Customizable filters
+- Data type conversion
+- "Statically typed" configuration data
+- Easy to use
+#### Weaknesses
+- Underlying limitations of configuration source are carried through
+- Nested Lists (see [below](#limitations) for details)
+### Maven Snippet
 ```xml
 <dependency>
 	<groupId>io.github.ttno1</groupId>
@@ -24,8 +36,8 @@ from a String to a URI, to make life easier when you need to access the data lat
 	<version>1.0.0</version>
 </dependency>
 ```
-[Javadoc](https://ttno1.github.io/ConfigValidation4j/)
-## How to use
+### [Javadoc](https://ttno1.github.io/ConfigValidation4j/)
+# How to use
 ### Main Classes
 - `ConfigSpec` - Represents a specification that a config must meet in order to be valid.
 - `ConfigNode` - Represents an item in a config that must be present and (optionally) must meet certain requirements.
@@ -91,7 +103,7 @@ if(!result.passed()) {
 	System.out.println(result.getFailMessage());
 }
 ```
-### Dependencies
+# Dependencies
 In order to use this library with SnakeYAML, Apache Commons Configuration, or Apache Commons Validator (for URL validation), you must include those dependencies separately.
 For your convenience, here are the maven snippets for those dependencies.
 ```xml
@@ -114,15 +126,15 @@ For your convenience, here are the maven snippets for those dependencies.
 	<version>1.7</version>
 </dependency>
 ```
-### Limitations
-#### Underlying Limitations
+# Limitations
+### Underlying Limitations
 This library serves only as a validation layer on top of whatever means you use to get your configuration data.
 If you choose to use a library like Apache Commons Config or SnakeYAML, then the limitations of that library will still apply.
 
 For example, by default SnakeYAML treats all decimals as `double`s, so if you attempt to validate a `ConfigNode` of type `float`, it will not work.
-#### Nested Lists
+### Nested Lists
 When validating a list of lists (assuming the underlying config library supports nested lists), the inner list cannot have a specific type and will always be a list of objects. This means that for `ConfigFilter` purposes, the filter will accept a type of `List<List<Object>>`.
-## Contributing
+# Contributing
 Feel free to contribute in any way you please. It is much appreciated.
-## Questions
+# Questions
 Feel free to ask in an issue or by contacting me.
