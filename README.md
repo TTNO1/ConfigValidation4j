@@ -33,7 +33,7 @@ you need.
 <dependency>
 	<groupId>io.github.ttno1</groupId>
 	<artifactId>configvalidation</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 </dependency>
 ```
 ### [Javadoc](https://ttno1.github.io/ConfigValidation4j/)
