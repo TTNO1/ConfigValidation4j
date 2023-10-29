@@ -5,7 +5,7 @@ package io.github.ttno1.configvalidation;
  * Specifies whether it passed or failed, the output if it passed, and the fail message if it failed.
  * @param <T> the output type
  */
-class ConfigFilterResult<T> {
+public class ConfigFilterResult<T> {
 
 	private final boolean pass;
 	
