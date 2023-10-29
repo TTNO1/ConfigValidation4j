@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"io.github.ttno1.configvalidation"},{"l":"io.github.ttno1.configvalidation.defaultwrappers"}];updateSearchResults();
