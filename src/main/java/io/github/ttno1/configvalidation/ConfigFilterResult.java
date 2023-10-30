@@ -53,7 +53,7 @@ public class ConfigFilterResult<T> {
 	 * @param result the output
 	 * @return a new ConfigFilterResult that passed with the specified output
 	 */
-	protected static <U> ConfigFilterResult<U> pass(U result) {
+	public static <U> ConfigFilterResult<U> pass(U result) {
 		return new ConfigFilterResult<U>(true, result, null);
 	}
 	
@@ -63,7 +63,7 @@ public class ConfigFilterResult<T> {
 	 * @param message the fail message
 	 * @return a new ConfigFilterResult that failed with the specified fail message
 	 */
-	protected static <U> ConfigFilterResult<U> fail(String message) {
+	public static <U> ConfigFilterResult<U> fail(String message) {
 		return new ConfigFilterResult<U>(false, null, message);
 	}
 	
@@ -72,7 +72,7 @@ public class ConfigFilterResult<T> {
 	 * @param <U> the output type
 	 * @return a new ConfigFilterResult that failed
 	 */
-	protected static <U> ConfigFilterResult<U> fail() {
+	public static <U> ConfigFilterResult<U> fail() {
 		return fail("");
 	}
 
