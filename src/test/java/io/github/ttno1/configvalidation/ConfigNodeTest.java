@@ -24,7 +24,7 @@ public class ConfigNodeTest {
 		ConfigWrapper wrapper = new SnakeYamlConfigWrapper(new Yaml().load(yamlStream));
 		assertDoesNotThrow(yamlStream::close);
 		
-		var result = Cfg.newSpec()
+		Cfg.newSpec()
 				.addNode("topBoolean", Cfg.Node.ofBoolean(ConfigFilter.run((r) -> assertEquals(r, true))))
 				.addNode("topByte", Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, 127))))
 				.addNode("topDouble",
@@ -57,7 +57,7 @@ public class ConfigNodeTest {
 						.addNode("subLong",
 								Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
 						.addNode("subShort",
-								Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, (int)Short.MAX_VALUE))))
+								Cfg.Node.ofInteger().thenRun((r) -> assertEquals(r, (int)Short.MAX_VALUE)))
 						.addNode("subString",
 								Cfg.Node.ofString(ConfigFilter
 										.run((r) -> assertEquals(r, "Test Config String value 1234 false"))))
@@ -70,9 +70,7 @@ public class ConfigNodeTest {
 							});
 							assertEquals(r, url);
 						}))).addNode("subEnum", Cfg.Node.ofString(ConfigFilters.validEnum(TestEnum.class))))
-				.validate(wrapper);
-		
-		assertTrue(result.passed(), result::getFailMessage);
+				.validate(wrapper).handle(res -> assertTrue(res.passed(), res::getFailMessage));
 
 	}
 

@@ -1,5 +1,7 @@
 package io.github.ttno1.configvalidation;
 
+import java.util.function.Consumer;
+
 /**
  * Represents the result of a config validation operation.<br>
  * Specifies whether it passed or failed and a fail message if it failed.
@@ -33,6 +35,17 @@ public class ConfigValidationResult {
 			throw new IllegalStateException("Cannot get fail message of passed validation result");
 		}
 		return failMessage;
+	}
+	
+	/**
+	 * Convenience method that runs the provided consumer with {@code this} as the argument.<br>
+	 * Allows for easy handling of this ConfigValidationResult through method chaining. 
+	 * @param consumer the consumer to run on {@code this}
+	 * @return {@code this}
+	 */
+	public ConfigValidationResult handle(Consumer<ConfigValidationResult> consumer) {
+		consumer.accept(this);
+		return this;
 	}
 	
 	protected static ConfigValidationResult pass() {

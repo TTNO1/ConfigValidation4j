@@ -1,5 +1,7 @@
 package io.github.ttno1.configvalidation;
 
+import java.util.function.Consumer;
+
 /**
  * Represents a node that should exist in a configuration.<br>
  * Specifies a data type and a filter that a configuration node should match.<br>
@@ -9,7 +11,6 @@ package io.github.ttno1.configvalidation;
  * @param <U> the output type of this ConfigNodes's filter.
  */
 public class ConfigNode<T, U> {
-	//TODO memory cleanup method?
 	
 	protected ConfigFilter<T, U> filter;
 	
@@ -53,6 +54,16 @@ public class ConfigNode<T, U> {
 	 */
 	public <V> ConfigNode<T, V> withFilter(ConfigFilter<U, V> filter) {
 		return new ConfigNode<T, V>(this.filter.withFilter(filter), baseType);
+	}
+	
+	/**
+	 * Convenience method that returns a new ConfigNode with the provided consumer appended onto the current filter akin to 
+	 * {@link ConfigFilter#thenRun(Consumer)}.
+	 * @param consumer the consumer to append to the current filter
+	 * @return a new ConfigNode with the provided consumer appended onto the current filter
+	 */
+	public ConfigNode<T, U> thenRun(Consumer<U> consumer) {
+		return withFilter(ConfigFilter.run(consumer));
 	}
 	
 	/**
