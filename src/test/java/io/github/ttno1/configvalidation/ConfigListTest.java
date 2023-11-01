@@ -49,6 +49,12 @@ public class ConfigListTest {
 
 		assertTrue(result.passed(), result::getFailMessage);
 		
+		ConfigValidationResult result2 = Cfg.newSpec()
+				.addNode("nonexistentList", Cfg.List.ofString())
+				.validate(wrapper);
+
+		assertFalse(result2.passed(), "Expected validation to fail for nonexstent list but passed.");
+		
 	}
 	
 	@Test
@@ -76,6 +82,12 @@ public class ConfigListTest {
 				.validate(wrapper);
 
 		assertTrue(result.passed(), result::getFailMessage);
+		
+		ConfigValidationResult result2 = Cfg.newSpec()
+				.addNode("nonexistentList", Cfg.List.ofString())
+				.validate(wrapper);
+
+		assertFalse(result2.passed(), "Expected validation to fail for nonexstent list but passed.");
 		
 	}
 
