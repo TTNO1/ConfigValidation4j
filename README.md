@@ -51,57 +51,60 @@ you need.
 ```java
 ConfigWrapper wrapper = new SnakeYamlConfigWrapper(new Yaml().load(/*config input stream*/));
 		
-ConfigValidationResult result = Cfg.newSpec()
-	.addNode("path.to.boolean.node", Cfg.Node.ofBoolean())
-	.addNode("path.to.integer.node", Cfg.Node.ofInteger())
-	.addNode("path.to.string.node", Cfg.Node.ofString())
-	.addNode("path.to.list.of.strings", Cfg.List.ofString())
-	.addNode("path.to.config.subsection", Cfg.newSpec().addNode(/*etc.*/))
-	.validate(wrapper);
-
-if(!result.passed()) {
-	//do something when config is invalid
-	System.out.println(result.getFailMessage());
-}
+Cfg.newSpec()
+.addNode("path.to.boolean.node", Cfg.Node.ofBoolean())
+.addNode("path.to.integer.node", Cfg.Node.ofInteger())
+.addNode("path.to.string.node", Cfg.Node.ofString())
+.addNode("path.to.list.of.strings", Cfg.List.ofString())
+.addNode("path.to.config.subsection", Cfg.newSpec().addNode(/*etc.*/))
+.validate(wrapper)
+.handle(result -> {
+	if(!result.passed()) {
+		//do something when config is invalid
+		System.out.println(result.getFailMessage());
+	}
+});
 ```
 #### Config Nodes with Filters
 ```java
 ConfigWrapper wrapper = new SnakeYamlConfigWrapper(new Yaml().load(/*config input stream*/));
 		
-ConfigValidationResult result = Cfg.newSpec()
-	.addNode("path.to.url.node", Cfg.Node.ofString(ConfigFilters.validURL()))
-	.addNode("path.to.file.node", Cfg.Node.ofString(ConfigFilters.validPath(FileState.PATH)))
-	.addNode("path.to.string.node", Cfg.Node.ofString((string) -> {
-			if(string.contains("mySubString")) {
-				return ConfigFilterResult.pass(string.toUpperCase());// ConfigFilterResult#pass() takes in the transformed value, it does not have to be the same type
-			} else {
-				return ConfigFilterResult.fail("My Fail Message");
-			}
-		}))
-	.validate(wrapper);
-
-if(!result.passed()) {
-	//do something when config is invalid
-	System.out.println(result.getFailMessage());
-}
+Cfg.newSpec()
+.addNode("path.to.url.node", Cfg.Node.ofString(ConfigFilters.validURL()))
+.addNode("path.to.file.node", Cfg.Node.ofString(ConfigFilters.validPath(FileState.PATH)))
+.addNode("path.to.string.node", Cfg.Node.ofString((string) -> {
+	if(string.contains("mySubString")) {
+		return ConfigFilterResult.pass(string.toUpperCase());// ConfigFilterResult#pass() takes in the transformed value, it does not have to be the same type
+	} else {
+		return ConfigFilterResult.fail("My Fail Message");
+	}
+}))
+.validate(wrapper)
+.handle(result -> {
+	if(!result.passed()) {
+		//do something when config is invalid
+		System.out.println(result.getFailMessage());
+	}
+});
 ```
 #### Getting Values from Nodes
-The easiest way to save the value of a `ConfigNode` is with the `ConfigFilter#thenRun` or `ConfigFilter#run` method.
+The easiest way to save the value of a `ConfigNode` is with the `ConfigFilter#thenRun` or `ConfigNode#thenRun` method.
 ```java
 ConfigWrapper wrapper = new SnakeYamlConfigWrapper(new Yaml().load(/*config input stream*/));
 
 String myConfigStringValue = null;// value to be obtained from config (pretend this is a field in a class)
 Path myConfigFileValue = null;// value to be obtained from config (pretend this is a field in a class)
 
-ConfigValidationResult result = Cfg.newSpec()
-	.addNode("path.to.file.node", Cfg.Node.ofString(ConfigFilters.validPath(FileState.PATH).thenRun((path) -> {myConfigFileValue = path;})))
-	.addNode("path.to.string.node", Cfg.Node.ofString(ConfigFilter.run((string) -> {myConfigStringValue = string;})))
-	.validate(wrapper);
-
-if(!result.passed()) {
-	//do something when config is invalid
-	System.out.println(result.getFailMessage());
-}
+Cfg.newSpec()
+.addNode("path.to.file.node", Cfg.Node.ofString(ConfigFilters.validPath(FileState.PATH).thenRun((path) -> {myConfigFileValue = path;})))
+.addNode("path.to.string.node", Cfg.Node.ofString().thenRun((string) -> {myConfigStringValue = string;}))
+.validate(wrapper)
+.handle(result -> {
+	if(!result.passed()) {
+		//do something when config is invalid
+		System.out.println(result.getFailMessage());
+	}
+});
 ```
 # Dependencies
 In order to use this library with SnakeYAML, Apache Commons Configuration, or Apache Commons Validator (for URL validation), you must include those dependencies separately.
