@@ -14,22 +14,38 @@ public class MapConfigWrapper extends AbstractConfigWrapper {
 
 	private final Map<String, Object> map;
 	
+	private final String separator;
+	
 	/**
 	 * 
 	 * @param map
+	 * @param separator the regex expression that separates nodes from sub-nodes e.g. "."
 	 * @throws NullPointerException if map is null
+	 * @throws IllegalArgumentException if separator is null or empty
 	 */
-	public MapConfigWrapper(Map<String, Object> map) {
+	public MapConfigWrapper(Map<String, Object> map, String separator) {
 		if(map == null) {
 			throw new NullPointerException("Map cannot be null");
 		}
+		if(separator == null || separator.isEmpty()) {
+			throw new IllegalArgumentException("Separator cannot be null or empty");
+		}
 		this.map = map;
+		this.separator = separator;
 	}
 	
 	@Override
 	public Object get(String path) {
 		if(path.isEmpty()) {
 			return map;
+		}
+		String[] split = path.split(separator);
+		if(split.length > 1) {
+			MapConfigWrapper wrapper = this;
+			for(int i = 0; i < split.length - 1; i++) {
+				wrapper = (MapConfigWrapper) wrapper.getConfigSubsection(split[i]);
+			}
+			return wrapper.get(split[split.length - 1]);
 		}
 		return map.get(path);
 	}
@@ -38,7 +54,7 @@ public class MapConfigWrapper extends AbstractConfigWrapper {
 	@Override
 	public ConfigWrapper getConfigSubsection(String path) {
 		try {
-			return new MapConfigWrapper((Map<String, Object>) get(path));
+			return new MapConfigWrapper((Map<String, Object>) get(path), separator);
 		} catch (ClassCastException e) {
 			return null;
 		}
@@ -49,7 +65,7 @@ public class MapConfigWrapper extends AbstractConfigWrapper {
 	public <T> List<T> getList(String path, BaseType baseType, Class<T> type) {
 		try {
 			if(baseType.equals(BaseType.CONFIG_SECTION)) {
-				return (List<T>) ((List<Map<String, Object>>) get(path)).stream().map(map -> {return new MapConfigWrapper(map);}).toList();
+				return (List<T>) ((List<Map<String, Object>>) get(path)).stream().map(map -> {return new MapConfigWrapper(map, separator);}).toList();
 			}
 			return (List<T>) get(path);
 		} catch (ClassCastException e) {

@@ -24,16 +24,14 @@ public class ConfigNodeTest {
 		ConfigWrapper wrapper = new SnakeYamlConfigWrapper(new Yaml().load(yamlStream));
 		assertDoesNotThrow(yamlStream::close);
 		
-		Cfg.newSpec()
-				.addNode("topBoolean", Cfg.Node.ofBoolean(ConfigFilter.run((r) -> assertEquals(r, true))))
+		Cfg.newSpec().addNode("topBoolean", Cfg.Node.ofBoolean(ConfigFilter.run((r) -> assertEquals(r, true))))
 				.addNode("topByte", Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, 127))))
-				.addNode("topDouble",
-						Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567890123456D))))
+				.addNode("topDouble", Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567890123456D))))
 				.addNode("topFloat", Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567D))))
-				.addNode("topInteger",
-						Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, Integer.MAX_VALUE))))
+				.addNode("topInteger", Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, Integer.MAX_VALUE))))
 				.addNode("topLong", Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
-				.addNode("topShort", Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, (int)Short.MAX_VALUE))))
+				.addNode("topShort",
+						Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, (int) Short.MAX_VALUE))))
 				.addNode("topString",
 						Cfg.Node.ofString(
 								ConfigFilter.run((r) -> assertEquals(r, "Test Config String value 1234 false"))))
@@ -46,6 +44,9 @@ public class ConfigNodeTest {
 					});
 					assertEquals(r, url);
 				}))).addNode("topEnum", Cfg.Node.ofString(ConfigFilters.validEnum(TestEnum.class)))
+				.addNode("node.subString",
+						Cfg.Node.ofString(
+								ConfigFilter.run((r) -> assertEquals(r, "Test Config String value 1234 false"))))
 				.addNode("node", Cfg.newSpec()
 						.addNode("subBoolean", Cfg.Node.ofBoolean(ConfigFilter.run((r) -> assertEquals(r, true))))
 						.addNode("subByte", Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, 127))))
@@ -54,10 +55,9 @@ public class ConfigNodeTest {
 						.addNode("subFloat", Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567D))))
 						.addNode("subInteger",
 								Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, Integer.MAX_VALUE))))
-						.addNode("subLong",
-								Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
+						.addNode("subLong", Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
 						.addNode("subShort",
-								Cfg.Node.ofInteger().thenRun((r) -> assertEquals(r, (int)Short.MAX_VALUE)))
+								Cfg.Node.ofInteger().thenRun((r) -> assertEquals(r, (int) Short.MAX_VALUE)))
 						.addNode("subString",
 								Cfg.Node.ofString(ConfigFilter
 										.run((r) -> assertEquals(r, "Test Config String value 1234 false"))))
@@ -77,16 +77,16 @@ public class ConfigNodeTest {
 	@Test
 	void commonsConfigNodeValidationTest() {
 		
-		ConfigWrapper wrapper = new CommonsConfigWrapper(assertDoesNotThrow(() -> {return new Configurations().xml(ConfigNodeTest.class.getResource("/testXmlConfig.xml"));}));
-		
+		ConfigWrapper wrapper = new CommonsConfigWrapper(assertDoesNotThrow(() -> {
+			return new Configurations().xml(ConfigNodeTest.class.getResource("/testXmlConfig.xml"));
+		}));
+
 		var result = Cfg.newSpec()
 				.addNode("topBoolean", Cfg.Node.ofBoolean(ConfigFilter.run((r) -> assertEquals(r, true))))
-				.addNode("topByte", Cfg.Node.ofByte(ConfigFilter.run((r) -> assertEquals(r, (byte)127))))
-				.addNode("topDouble",
-						Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567890123456D))))
+				.addNode("topByte", Cfg.Node.ofByte(ConfigFilter.run((r) -> assertEquals(r, (byte) 127))))
+				.addNode("topDouble", Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567890123456D))))
 				.addNode("topFloat", Cfg.Node.ofFloat(ConfigFilter.run((r) -> assertEquals(r, 1.234567F))))
-				.addNode("topInteger",
-						Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, Integer.MAX_VALUE))))
+				.addNode("topInteger", Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, Integer.MAX_VALUE))))
 				.addNode("topLong", Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
 				.addNode("topShort", Cfg.Node.ofShort(ConfigFilter.run((r) -> assertEquals(r, Short.MAX_VALUE))))
 				.addNode("topString",
@@ -101,16 +101,18 @@ public class ConfigNodeTest {
 					});
 					assertEquals(r, url);
 				}))).addNode("topEnum", Cfg.Node.ofString(ConfigFilters.validEnum(TestEnum.class)))
+				.addNode("node.subString",
+						Cfg.Node.ofString(
+								ConfigFilter.run((r) -> assertEquals(r, "Test Config String value 1234 false"))))
 				.addNode("node", Cfg.newSpec()
 						.addNode("subBoolean", Cfg.Node.ofBoolean(ConfigFilter.run((r) -> assertEquals(r, true))))
-						.addNode("subByte", Cfg.Node.ofByte(ConfigFilter.run((r) -> assertEquals(r, (byte)127))))
+						.addNode("subByte", Cfg.Node.ofByte(ConfigFilter.run((r) -> assertEquals(r, (byte) 127))))
 						.addNode("subDouble",
 								Cfg.Node.ofDouble(ConfigFilter.run((r) -> assertEquals(r, 1.234567890123456D))))
 						.addNode("subFloat", Cfg.Node.ofFloat(ConfigFilter.run((r) -> assertEquals(r, 1.234567F))))
 						.addNode("subInteger",
 								Cfg.Node.ofInteger(ConfigFilter.run((r) -> assertEquals(r, Integer.MAX_VALUE))))
-						.addNode("subLong",
-								Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
+						.addNode("subLong", Cfg.Node.ofLong(ConfigFilter.run((r) -> assertEquals(r, Long.MAX_VALUE))))
 						.addNode("subShort",
 								Cfg.Node.ofShort(ConfigFilter.run((r) -> assertEquals(r, Short.MAX_VALUE))))
 						.addNode("subString",
@@ -126,7 +128,7 @@ public class ConfigNodeTest {
 							assertEquals(r, url);
 						}))).addNode("subEnum", Cfg.Node.ofString(ConfigFilters.validEnum(TestEnum.class))))
 				.validate(wrapper);
-		
+
 		assertTrue(result.passed(), result::getFailMessage);
 		
 	}

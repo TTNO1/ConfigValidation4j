@@ -11,7 +11,7 @@ import io.github.ttno1.configvalidation.ConfigWrapper;
 public class SnakeYamlConfigWrapper extends MapConfigWrapper {
 
 	public SnakeYamlConfigWrapper(Map<String, Object> map) {
-		super(map);
+		super(map, "\\.");
 	}
 
 }
