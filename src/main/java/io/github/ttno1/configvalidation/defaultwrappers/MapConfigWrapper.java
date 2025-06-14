@@ -19,7 +19,7 @@ public class MapConfigWrapper extends AbstractConfigWrapper {
 	/**
 	 * 
 	 * @param map
-	 * @param separator the regex expression that separates nodes from sub-nodes e.g. "."
+	 * @param separator the regex expression that separates nodes from sub-nodes e.g. "\."
 	 * @throws NullPointerException if map is null
 	 * @throws IllegalArgumentException if separator is null or empty
 	 */
@@ -44,6 +44,9 @@ public class MapConfigWrapper extends AbstractConfigWrapper {
 			MapConfigWrapper wrapper = this;
 			for(int i = 0; i < split.length - 1; i++) {
 				wrapper = (MapConfigWrapper) wrapper.getConfigSubsection(split[i]);
+				if(wrapper == null) {
+					return null;
+				}
 			}
 			return wrapper.get(split[split.length - 1]);
 		}
@@ -54,7 +57,11 @@ public class MapConfigWrapper extends AbstractConfigWrapper {
 	@Override
 	public ConfigWrapper getConfigSubsection(String path) {
 		try {
-			return new MapConfigWrapper((Map<String, Object>) get(path), separator);
+			Map<String, Object> subMap = (Map<String, Object>) get(path);
+			if(subMap == null) {
+				return null;
+			}
+			return new MapConfigWrapper(subMap, separator);
 		} catch (ClassCastException e) {
 			return null;
 		}
