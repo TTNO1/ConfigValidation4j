@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.ttno1</groupId>
 	<artifactId>configvalidation</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7</version>
 	<packaging>jar</packaging>
 
 	<name>ConfigValidation4j</name>
@@ -27,12 +27,6 @@
 		</license>
 	</licenses>
 
-	<scm>
-		<connection>scm:git:git://github.com/TTNO1/ConfigValidation4j.git</connection>
-		<developerConnection>scm:git:ssh://github.com:TTNO1/ConfigValidation4j.git</developerConnection>
-		<url>https://github.com/TTNO1/ConfigValidation4j</url>
-	</scm>
-
 	<properties>
 		<io.github.ttno1.configvalidation.author>TTNO1</io.github.ttno1.configvalidation.author>
 		<maven.compiler.source>21</maven.compiler.source>
@@ -40,13 +34,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<distributionManagement>
-		<repository>
-			<id>ossrh</id>
-			<name>Central Repository OSSRH</name>
-			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
+	<scm>
+		<connection>scm:git:git://github.com/TTNO1/ConfigValidation4j.git</connection>
+		<developerConnection>scm:git:ssh://github.com:TTNO1/ConfigValidation4j.git</developerConnection>
+		<url>https://github.com/TTNO1/ConfigValidation4j</url>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -88,6 +80,7 @@
 				<executions>
 					<execution>
 						<id>attach-sources</id>
+						<phase>package</phase>
 						<goals>
 							<goal>jar-no-fork</goal>
 						</goals>
@@ -107,6 +100,7 @@
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
+						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -132,6 +126,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.7.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>central</publishingServerId>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
